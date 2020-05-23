@@ -10,5 +10,5 @@ def focus_out(focus_message):
 
 
 def write(text, indent=0):
-    indent = ''.join(['\t'] * indent)
+    indent = ''.join(['   '] * indent)
     click.echo(f'{indent}{text}')

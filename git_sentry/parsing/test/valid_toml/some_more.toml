@@ -1,0 +1,16 @@
+[[group]]
+name = 'Cowboys'
+usernames = [
+    'ceastwood',
+    'richard',
+]
+[[group]]
+name = 'Friends'
+usernames = [
+    'Joey',
+    'Ross',
+    'Chandler',
+    'Monica',
+    'Rachel',
+    'Phoebe',
+]
