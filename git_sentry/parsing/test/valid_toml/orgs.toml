@@ -1,0 +1,30 @@
+[[org]]
+pattern = 'git-sentry'
+[org.members]
+usernames = [
+    'DragosDumitrache',
+]
+groups = [
+    'Friends',
+]
+[org.admins]
+usernames = [
+    'DragosDumitrache',
+]
+groups = [
+    'Friends',
+]
+
+[[org]]
+pattern = 'cucumber'
+[org.members]
+usernames = [
+    'DragosDumitrache',
+]
+groups = [
+    'Friends',
+]
+[org.admins]
+usernames = [
+    'DragosDumitrache',
+]

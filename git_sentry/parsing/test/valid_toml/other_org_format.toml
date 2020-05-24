@@ -1,0 +1,18 @@
+[[org]]
+pattern = 'git-sentry-2'
+
+[org.members]
+usernames = ['DragosDumitrache',]
+groups = [
+    'Friends'
+]
+
+[org.admins]
+usernames = [
+    'DragosDumitrache',
+]
+groups = [
+    'Friends',
+]
+
+

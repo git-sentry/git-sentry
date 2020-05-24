@@ -4,7 +4,7 @@ import click
 
 from git_sentry.logging.printer import write, focus_out
 from git_sentry.main.connectivity.git import connect
-from git_sentry.parsing.toml_parser import read_toml_configuration
+from git_sentry.parsing.toml_parser import parse_toml_configuration
 
 
 @click.group()
@@ -20,8 +20,8 @@ def apply():
 
     git_client = connect()
     write(f'Hello {focus_out(git_client.me().login)}\n')
-    read_toml_configuration(toml_path)
 
+    parse_toml_configuration(toml_path)
 
 
 def main():
