@@ -9,6 +9,7 @@ CONFIG_FILE_PATH = os.path.expanduser('~/.config/sentry/sentry.ini')
 def read_config():
     config_parser = configparser.ConfigParser()
     if not os.path.isfile(CONFIG_FILE_PATH):
+        os.makedirs(os.path.dirname(CONFIG_FILE_PATH))
         github_instance = click.prompt('Github instance URL', default='github.com')
         token = click.prompt('Token', hide_input=True)
         config_parser[github_instance] = {'token': token}
