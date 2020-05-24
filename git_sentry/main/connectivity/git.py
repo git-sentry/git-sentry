@@ -41,5 +41,5 @@ def _connect():
         if github_url == 'github.com':
             git_client = login(token=github_token)
         else:
-            git_client = enterprise_login(url=github_url, token=github_token)
+            git_client = enterprise_login(url=f'https://{github_url}', token=github_token)
     return git_client
