@@ -1,5 +1,4 @@
 import glob
-import pprint
 from collections import OrderedDict
 
 import toml
@@ -12,14 +11,15 @@ def find_toml_files(path):
 
 
 def parse_toml_configuration(path):
-    files = find_toml_files(path)
-    groups = _parse_groups(files)
-    orgs = _parse_orgs(files, groups)
-    pprint.pprint(orgs)
+    groups = parse_groups(path)
+    orgs = _parse_orgs(path, groups)
+    teams = _parse_teams(path, groups)
+    return orgs, teams
 
 
-def _parse_groups(files):
+def parse_groups(path):
     groups = {}
+    files = find_toml_files(path)
     for f in files:
         toml_config = toml.load(f)
         groups.update(_extract_group_members(toml_config.get('group', [])))
@@ -58,31 +58,68 @@ def flatten_group(original_group_configs, flattened_group_configs):
                 flattened_group_configs[group_name] += new_members
     return new_elements_found
 
-def _parse_orgs(files, groups):
+
+def _parse_orgs(path, groups):
     orgs = {}
+    files = find_toml_files(path)
     for f in files:
         toml_config = toml.load(f)
         orgs.update(_extract_org_configuration(toml_config.get('org', []), groups))
     return orgs
+
 
 def _extract_org_configuration(orgs, groups):
     org_configs = {}
     for org in orgs:
         pattern = org['pattern']
         if pattern in org_configs.keys():
-            write(f'Error: Duplicate pattern {pattern}')
+            write(f'Error: Duplicate pattern {pattern} for org configuration')
             exit(1)
-        org_configs[pattern] = {}
-        org_configs[pattern]['members'] = _org_membership_config(org, 'members', groups)
-        org_configs[pattern]['admins'] = _org_membership_config(org, 'admins', groups)
+
+        org_configs[pattern] = _extract_user_model(org, groups)
 
     return org_configs
 
 
-def _org_membership_config(org, role, groups):
-    member_config = org.get(role, {})
+def _extract_user_model(org, groups):
+    org_configuration = {}
 
-    usernames = member_config.get('usernames', [])
-    for group in member_config.get('groups', []):
-        usernames += groups[group]
-    return usernames
+    for role in ['members', 'admins']:
+        member_config = org.get(role, {})
+
+        usernames = member_config.get('usernames', [])
+        for group in member_config.get('groups', []):
+            usernames += [m for m in groups[group] if m not in usernames]
+        org_configuration[role] = usernames
+
+    return org_configuration
+
+
+def _parse_teams(path, groups):
+    teams = {}
+    files = find_toml_files(path)
+    for f in files:
+        toml_config = toml.load(f)
+        teams.update(_extract_team_configuration(toml_config.get('team', []), groups))
+    return teams
+
+
+def _extract_team_configuration(teams, groups):
+    team_configs = {}
+    for team in teams:
+        name = team['name']
+        if name in team_configs.keys():
+            write(f'Error: Duplicate team definition {name}')
+            exit(1)
+        team_configs[name] = _team_configuration(team, groups)
+
+    return team_configs
+
+
+def _team_configuration(team, groups):
+    team_config = _extract_user_model(team, groups)
+    repository_access_rules = team.get('repos', [])
+
+    team_config['repos'] = {repo_access['pattern']: repo_access['permission'] for repo_access in
+                            repository_access_rules}
+    return team_config

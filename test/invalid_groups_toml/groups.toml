@@ -1,0 +1,17 @@
+[[group]]
+name = 'Musicians'
+usernames = [
+    'Jimmy Hendrix',
+    'Bob Dylan',
+    'Keith Richards',
+    'Eminem',
+]
+
+[[group]]
+name = 'Musicians'
+usernames = [
+    'Mick Jagger',
+    'Keith Richards',
+    'Ronnie Woods',
+    'Charlie Watts',
+]

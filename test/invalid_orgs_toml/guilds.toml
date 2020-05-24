@@ -1,0 +1,17 @@
+[[org]]
+pattern = 'Artists'
+[org.members]
+usernames = [
+    'Adele',
+]
+groups = [
+    'Rolling Stones',
+    'Musicians',
+]
+[org.admins]
+groups = [
+    'Musicians',
+]
+
+[[org]]
+pattern = 'Artists'

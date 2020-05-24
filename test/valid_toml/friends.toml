@@ -1,0 +1,20 @@
+[[team]]
+name = "Chandler's"
+
+[team.members]
+usernames = [
+    'Joey', 'Rachel',
+]
+
+[team.admins]
+usernames = [
+    'Chandler',
+]
+
+[[team.repos]]
+pattern = 'turkey/sandwich'
+permission = 'push'
+
+[[team.repos]]
+pattern = 'dinner/pizza'
+permission = 'admin'

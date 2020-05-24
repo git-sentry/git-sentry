@@ -1,15 +1,14 @@
 [[org]]
-pattern = 'git-sentry-2'
+pattern = 'Friends Forever'
 
 [org.members]
-usernames = ['DragosDumitrache',]
 groups = [
     'Friends'
 ]
 
 [org.admins]
 usernames = [
-    'DragosDumitrache',
+    'Chandler',
 ]
 groups = [
     'Friends',

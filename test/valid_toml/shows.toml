@@ -1,10 +1,4 @@
 [[group]]
-name = 'Cowboys'
-usernames = [
-    'ceastwood',
-    'richard',
-]
-[[group]]
 name = 'Friends'
 usernames = [
     'Joey',

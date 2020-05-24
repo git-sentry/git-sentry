@@ -16,12 +16,12 @@ def cli():
 # @click.argument('toml_path', type=click.Path(exists=True, resolve_path=True))
 # def apply(toml_path):
 def apply():
-    toml_path = os.path.expanduser('~/workspace/git-sentry/git_sentry/parsing/test/valid_toml')
+    toml_path = os.path.expanduser('/test/valid_toml')
 
     git_client = connect()
     write(f'Hello {focus_out(git_client.me().login)}\n')
 
-    parse_toml_configuration(toml_path)
+    org, teams = parse_toml_configuration(toml_path)
 
 
 def main():
