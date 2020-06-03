@@ -3,6 +3,7 @@ import re
 from github3 import login, enterprise_login
 
 from git_sentry.configuration.config_reader import read_config
+from git_sentry.handlers.git_org import GitOrg
 
 git_client = None
 
@@ -18,7 +19,7 @@ class GitClient:
         orgs = self._git_client.organizations()
 
         regex = re.compile(query)
-        matching_orgs = [org for org in orgs if regex.match(org.login)]
+        matching_orgs = [GitOrg(org) for org in orgs if regex.match(org.login)]
         return matching_orgs
 
     def search_repos(self, query):

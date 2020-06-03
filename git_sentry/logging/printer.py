@@ -10,5 +10,15 @@ def focus_out(focus_message):
 
 
 def write(text, indent=0):
-    indent = ''.join(['   '] * indent)
-    click.echo(f'{indent}{text}')
+    click.echo(f'{pad(text, indent)}')
+
+
+def pad(text, indent=0):
+    prefix = ''.join(['   '] * indent)
+    return f'{prefix}{text}'
+
+
+def section(header):
+    pre = '-' * 20 + f' {header} '
+    remaining_length = 80 - len(pre)
+    return f"{pre}{'-' * remaining_length}\n"
