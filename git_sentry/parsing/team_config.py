@@ -19,7 +19,7 @@ class TeamConfig:
         return self._repos
 
     def diff(self, older_config: TeamConfig):
-        new_members = [m for m in self.members() if m not in older_config.members()]
+        new_members = [m for m in self.members() if m not in older_config.members() and m not in older_config.admins()]
         new_admins = [m for m in self.admins() if m not in older_config.admins()]
 
         new_repos = {r: permission for r, permission in self.repos().items() if permission != older_config.repos().get(r, None)}

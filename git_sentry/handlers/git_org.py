@@ -36,7 +36,7 @@ class GitOrg(AccessControlledGitObject):
             team_members = [m.login() for m in team.members(role='member')]
             team_admins = [m.login() for m in team.members(role='maintainer')]
 
-            repos = {repo.login(): repo.permission_for_team(team.login()) for repo in team.repositories()}
+            repos = {repo.full_name(): repo.permission_for_team(team.login()) for repo in team.repositories()}
             current_team_configuration[team.login()] = TeamConfig(team_members, team_admins, repos)
 
         return OrgConfig(self.login(), members, admins, current_team_configuration)
@@ -44,13 +44,19 @@ class GitOrg(AccessControlledGitObject):
     def members(self, role=None):
         return [GitUser(m) for m in self._git_object.members(role=role)]
 
-    def permission_for(self, user):
-        return self._git_object.membership_for(user.login())['role']
+    def permission_for(self, username):
+        members = [m.login() for m in self.members(role='member')]
+        admins = [m.login() for m in self.members(role='admins')]
+        if username in members:
+            return 'member'
+        if username in admins:
+            return 'admin'
+        return None
 
     def create_team(self, name, repos=None, permission='pull'):
         if not repos:
             repos = []
-        self._git_object.create_team(name, repo_names=repos, permission=permission, privacy='public')
+        return GitTeam(self._git_object.create_team(name, repo_names=repos, permission=permission, privacy='public'))
 
     def repositories(self):
         return [GitRepo(r) for r in self._git_object.repositories()]
