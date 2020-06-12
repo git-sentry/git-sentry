@@ -12,9 +12,9 @@ class TestOrgTeams:
     def test_team_with_initial_teams_has_them(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write', 'Admin'])
 
-        read = mock_team('Read')
-        write = mock_team('Write')
-        admin = mock_team('Admin')
+        read = mock_team('Read', target_org.raw_object())
+        write = mock_team('Write', target_org.raw_object())
+        admin = mock_team('Admin', target_org.raw_object())
 
         org_teams = target_org.teams()
         assert org_teams == [read, write, admin]
@@ -26,21 +26,21 @@ class TestOrgTeams:
     def test_adding_team_to_org(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write'])
 
-        read = mock_team('Read')
-        write = mock_team('Write')
+        read = mock_team('Read', target_org.raw_object())
+        write = mock_team('Write', target_org.raw_object())
 
         assert target_org.teams() == [read, write]
 
         target_org.create_team('Admin')
 
-        admin = mock_team('Admin')
+        admin = mock_team('Admin', target_org.raw_object())
         assert target_org.teams() == [read, write, admin]
 
     def test_adding_existing_team_to_org(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write'])
 
-        read = mock_team('Read')
-        write = mock_team('Write')
+        read = mock_team('Read', target_org.raw_object())
+        write = mock_team('Write', target_org.raw_object())
 
         assert target_org.teams() == [read, write]
 
@@ -73,7 +73,7 @@ class TestOrgTeams:
         assert team1.members('maintainer') == []
 
     def test_adding_existing_member(self):
-        team1 = mock_team('Team1')
+        team1 = mock_team('Team1', mock_org('target_org', team_names=['Team1']))
         assert team1.members() == []
         me = mock_user('me')
 
@@ -84,7 +84,7 @@ class TestOrgTeams:
         assert team1.members() == [me]
 
     def test_promote_existing_member(self):
-        team1 = mock_team('Team1')
+        team1 = mock_team('Team1', mock_org('target_org', team_names=['Team1']))
         assert team1.members() == []
         me = mock_user('me')
 
@@ -97,7 +97,7 @@ class TestOrgTeams:
         assert team1.members(role='maintainer') == [me]
 
     def test_demote_existing_member_does_nothing(self):
-        team1 = mock_team('Team1')
+        team1 = mock_team('Team1', mock_org('target_org', team_names=['Team1']))
         assert team1.members() == []
         me = mock_user('me')
 

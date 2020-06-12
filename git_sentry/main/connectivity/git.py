@@ -1,9 +1,9 @@
 import re
 
-from github3 import login, enterprise_login
-
 from git_sentry.configuration.config_reader import read_config
 from git_sentry.handlers.git_org import GitOrg
+from git_sentry.handlers.git_repo import GitRepo
+from github3 import login, enterprise_login
 
 git_client = None
 
@@ -11,27 +11,35 @@ git_client = None
 class GitClient:
     def __init__(self):
         self._git_client = _connect()
+        self._orgs = None
+        self._repos = None
 
     def me(self):
         return self._git_client.me()
 
     def search_orgs(self, query):
-        orgs = self._git_client.organizations()
+        if self._orgs is None:
+            self._orgs = self._git_client.organizations()
 
         regex = re.compile(query)
-        matching_orgs = [GitOrg(org) for org in orgs if regex.match(org.login)]
+        matching_orgs = [GitOrg(org) for org in self._orgs if regex.match(org.login)]
         return matching_orgs
 
     def search_repos(self, query):
-        orgs, *repos = query.split('/')
+        if self._repos is None:
+            self._repos = self._git_client.repositories()
 
-        matching_orgs = self.search_orgs(orgs)
-        if repos:
-            repos = repos[0]
-            regex = re.compile(repos)
-            matching_repos = [r for org in matching_orgs for r in org.repositories() if regex.match(r.name)]
-            return matching_repos
-        return []
+        regex = re.compile(query)
+
+        matching_repos = [GitRepo(repo) for repo in self._repos if regex.match(repo.full_name)]
+
+        return matching_repos
+
+    def organization(self, org_login):
+        org = self._git_client.organization(org_login)
+        if org is not None:
+            return GitOrg(org)
+        return None
 
 
 def _connect():

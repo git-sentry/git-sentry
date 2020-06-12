@@ -1,7 +1,0 @@
-[[team]]
-name = "Monica's"
-
-[team.members]
-groups = [
-    'Friends'
-]
