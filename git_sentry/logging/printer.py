@@ -21,4 +21,4 @@ def pad(text, indent=0):
 def section(header):
     pre = '-' * 20 + f' {header} '
     remaining_length = 80 - len(pre)
-    return f"{pre}{'-' * remaining_length}\n"
+    return f"{pre}{'-' * remaining_length}"

@@ -1,4 +1,15 @@
 [[group]]
+name = 'Friends'
+usernames = [
+    'Joey',
+    'Ross',
+    'Chandler',
+    'Monica',
+    'Rachel',
+    'Phoebe',
+]
+
+[[group]]
 name = 'Musicians'
 usernames = [
     'Jimmy Hendrix',

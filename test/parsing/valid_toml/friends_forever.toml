@@ -14,4 +14,32 @@ groups = [
     'Friends',
 ]
 
+[[org.team]]
+name = "Monica's"
+
+[org.team.members]
+groups = [
+    'Friends'
+]
+
+[[org.team]]
+name = "Chandler's"
+
+[org.team.members]
+usernames = [
+    'Joey', 'Rachel',
+]
+
+[org.team.admins]
+usernames = [
+    'Chandler',
+]
+
+[[org.team.repo]]
+pattern = 'turkey/sandwich'
+permission = 'push'
+
+[[org.team.repo]]
+pattern = 'dinner/pizza'
+permission = 'admin'
 
