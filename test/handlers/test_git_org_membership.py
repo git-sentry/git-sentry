@@ -19,7 +19,7 @@ class TestOrgMembership:
     def test_add_new_member(self):
         target_org = mock_org('target-org')
         me = mock_user('me')
-        target_org.grant_access(me)
+        target_org.grant_access(me.login())
 
         assert target_org.members() == [me]
 
@@ -27,25 +27,25 @@ class TestOrgMembership:
         target_org = mock_org('target-org')
         me = mock_user('me')
 
-        target_org.grant_access(me, role='admin')
+        target_org.grant_access(me.login(), role='admin')
 
-        assert target_org.permission_for(me) == 'admin'
+        assert target_org.permission_for(me.login()) == 'admin'
 
     def test_promote_existing_members(self):
         target_org = mock_org('target-org')
         me = mock_user('me')
 
-        target_org.grant_access(me)
+        target_org.grant_access(me.login())
 
-        assert target_org.permission_for(me) == 'member'
+        assert target_org.permission_for(me.login()) == 'member'
 
-        target_org.grant_access(me, role='admin')
-        assert target_org.permission_for(me) == 'admin'
+        target_org.grant_access(me.login(), role='admin')
+        assert target_org.permission_for(me.login()) == 'admin'
 
     def test_demote_existing_admin(self):
         target_org = mock_org('target-org', owner='me')
         me = mock_user('me')
 
-        target_org.grant_access(me)
+        target_org.grant_access(me.login())
 
-        assert target_org.permission_for(me) == 'admin'
+        assert target_org.permission_for(me.login()) == 'admin'
