@@ -12,9 +12,9 @@ class TestOrgTeams:
     def test_team_with_initial_teams_has_them(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write', 'Admin'])
 
-        read = mock_team('Read', target_org.raw_object())
-        write = mock_team('Write', target_org.raw_object())
-        admin = mock_team('Admin', target_org.raw_object())
+        read = mock_team('Read', target_org.login())
+        write = mock_team('Write', target_org.login())
+        admin = mock_team('Admin', target_org.login())
 
         org_teams = target_org.teams()
         assert org_teams == [read, write, admin]
@@ -26,21 +26,21 @@ class TestOrgTeams:
     def test_adding_team_to_org(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write'])
 
-        read = mock_team('Read', target_org.raw_object())
-        write = mock_team('Write', target_org.raw_object())
+        read = mock_team('Read', target_org.login())
+        write = mock_team('Write', target_org.login())
 
         assert target_org.teams() == [read, write]
 
         target_org.create_team('Admin')
 
-        admin = mock_team('Admin', target_org.raw_object())
+        admin = mock_team('Admin', target_org.login())
         assert target_org.teams() == [read, write, admin]
 
     def test_adding_existing_team_to_org(self):
         target_org = mock_org('target-org', team_names=['Read', 'Write'])
 
-        read = mock_team('Read', target_org.raw_object())
-        write = mock_team('Write', target_org.raw_object())
+        read = mock_team('Read', target_org.login())
+        write = mock_team('Write', target_org.login())
 
         assert target_org.teams() == [read, write]
 
@@ -57,7 +57,7 @@ class TestOrgTeams:
 
         repo1, repo2 = target_org.repositories()
 
-        team1.add_to_repo(repo1, 'maintainer')
+        team1.add_to_repo(repo1.login(), 'maintainer')
         assert team1.repositories() == [repo1]
 
     def test_adding_new_members(self):

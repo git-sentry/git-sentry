@@ -21,7 +21,7 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
     existing_members = []
     existing_admins = []
     repositories = []
-    teams = [mock_team(team_name, mocked_org) for team_name in team_names]
+    teams = [mock_team(team_name, org_name) for team_name in team_names]
 
     for i in range(number_of_repos):
         repo = mock_repo(org_name, f'repo{i}')
@@ -55,7 +55,7 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
                 existing_members.remove(raw_mock_member)
 
     def new_team(team_name, repo_names=None, permission=None, privacy=None, description=None):
-        mocked_team = mock_team(team_name, mocked_org)
+        mocked_team = mock_team(team_name, mocked_org.login)
         if mocked_team not in teams:
             teams.append(mocked_team)
 
@@ -80,6 +80,7 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
 def mock_repo(parent, repo_name):
     mocked_repo = mock.MagicMock(spec=ShortRepository)
     mocked_repo.name = repo_name
+    mocked_repo.login = repo_name
     mocked_repo.full_name = f'{parent}/{repo_name}'
 
     return GitRepo(mocked_repo)

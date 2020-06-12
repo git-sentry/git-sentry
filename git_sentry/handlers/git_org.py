@@ -16,10 +16,10 @@ class GitOrg(AccessControlledGitObject):
     def login(self):
         return self._git_object.login
 
-    def grant_access(self, user, role='member'):
-        current_permission = self.permission_for(user)
+    def grant_access(self, username, role='member'):
+        current_permission = self.permission_for(username)
         if current_permission != 'admin':
-            self._git_object.add_or_update_membership(user.login(), role)
+            self._git_object.add_or_update_membership(username, role)
 
     def revoke_access(self, username):
         self._git_object.remove_membership(username)
@@ -46,12 +46,13 @@ class GitOrg(AccessControlledGitObject):
 
     def permission_for(self, username):
         members = [m.login() for m in self.members(role='member')]
-        admins = [m.login() for m in self.members(role='admins')]
-        if username in members:
-            return 'member'
+        admins = [m.login() for m in self.members(role='admin')]
         if username in admins:
             return 'admin'
-        return None
+        elif username in members:
+            return 'member'
+        else:
+            return None
 
     def create_team(self, name, repos=None, permission='pull'):
         if not repos:
