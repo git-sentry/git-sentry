@@ -14,12 +14,21 @@ class OrgConfig:
 
         self._teams = teams
 
+    def members(self):
+        return self._members
+
+    def admins(self):
+        return self._admins
+
+    def teams(self):
+        return self._teams
+
     def diff(self, older_config: OrgConfig):
-        new_members = [m for m in self._members if m not in older_config._members]
-        new_admins = [m for m in self._admins if m not in older_config._admins]
+        new_members = [m for m in self.members() if m not in older_config.members() and m not in older_config.admins()]
+        new_admins = [m for m in self.admins() if m not in older_config.admins()]
 
         team_diff = {}
-        for team_name, team_config in self._teams.items():
+        for team_name, team_config in self.teams().items():
             if team_name not in older_config.teams().keys():
                 team_diff[team_name] = team_config
             else:
@@ -27,7 +36,6 @@ class OrgConfig:
                 new_team_config = team_config.diff(old_team_config)
                 if new_team_config.length() != 0:
                     team_diff[team_name] = new_team_config
-
         diff = OrgConfig(self._pattern, new_members, new_admins, team_diff)
         return diff
 
@@ -43,16 +51,13 @@ class OrgConfig:
                 regex = re.compile(repo_pattern)
                 for repo in actual_org.repositories():
                     if regex.match(repo.login()):
-                        resolved_repos[repo.login()] = permission
+                        resolved_repos[repo.full_name()] = permission
             teams_with_resolved_repositories[team_name] = TeamConfig(resolved_members, resolved_admins, resolved_repos)
 
         return OrgConfig(actual_org.login(), self._members, self._admins, teams_with_resolved_repositories)
 
     def length(self):
         return len(self._members) + len(self._admins) + len(self._teams)
-
-    def teams(self):
-        return self._teams
 
     def __repr__(self):
         output = []
@@ -66,20 +71,11 @@ class OrgConfig:
             output += [section('Org Owners')]
             output += [pad(admin, 2) for admin in self._admins]
 
-        if self._teams != {}:
-            output += [section(f'Teams in {self._pattern}')]
+        for team, team_config in self.teams().items():
+            output += [f'Team: {team}']
+            output += [f'{team_config}']
 
-            for team_name, team_config in self._teams.items():
-                output += [f'Team: {team_name}']
-
-                output += [f'{team_config}']
         return '\n'.join(output)
-
-    def members(self):
-        return self._members
-
-    def admins(self):
-        return self._admins
 
     def __eq__(self, other):
         if isinstance(other, OrgConfig):

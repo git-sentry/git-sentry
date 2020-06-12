@@ -16,8 +16,8 @@ class GitTeam(AccessControlledGitObject):
     def as_dict(self):
         return self._git_object.as_json()
 
-    def add_to_repo(self, repo, permission):
-        self._git_object.add_repository(repo.login(), permission)
+    def add_to_repo(self, repository_name, permission):
+        self._git_object.add_repository(repository_name, permission)
 
     def repositories(self):
         return [GitRepo(r) for r in self._git_object.repositories()]

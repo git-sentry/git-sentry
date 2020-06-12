@@ -14,7 +14,7 @@ def cli():
 
 @cli.command()
 @click.argument('toml_path', type=click.Path(exists=True, resolve_path=True))
-@click.option('-n', '--dry-run', is_flag=True, default=True)
+@click.option('-n', '--dry-run', is_flag=True, default=False)
 def apply(toml_path, dry_run):
     toml_path = os.path.expanduser(toml_path)
 
@@ -35,40 +35,27 @@ def apply(toml_path, dry_run):
                 write(f'Configuration analysis for {focus_out(org.login())} is complete.')
                 write(difference)
 
-            # if not dry_run:
-            #     for m in difference.members():
-            #         org.grant_access(m)
-            #
-            #     for m in difference.admins():
-            #         org.grant_access(m, role='admin')
-            #
-            #     for team in difference.teams():
-            #
+            if dry_run:
+                for m in difference.members():
+                    org.grant_access(m)
 
-    # for team_name, team_config in teams.items():
-    #     repo_configs = team_config.get('repos', [])
-    #
-    #     for repo_pattern, permission in repo_configs.items():
-    #         repositories = git_client.search_repos(repo_pattern)
-    #         for matching_repo in repositories:
-    #             matching_org = git_client.organization(matching_repo.owner().login)
-    #             existing_team = matching_org.team(team_name)
-    #             diff = TeamConfigurationDifference(team_name, existing_team, team_config, repositories, permission)
-    #             diff.difference()
-    #
-    #
-    #             # write(matching_repo.owner().login)
-    #
-    #         # print(retrieve_orgs)
-    #     #     git_client.search_repos(repo_pattern)
-    #         # print(repo, repo_config['permission'])
-    #         # pattern = repo['pattern']
-    #         # print(pattern)
-    #         # all_orgs_patterns = [['pattern']]
-    #     # print(team_name)
-    #     # print(team_config)
+                for m in difference.admins():
+                    org.grant_access(m, role='admin')
 
+                for team_name, team_config in difference.teams().items():
+                    existing_team = org.team(team_name)
+                    if existing_team is None:
+                        existing_team = org.create_team(team_name)
 
+                    for repo, permission in team_config.repos().items():
+                        existing_team.add_to_repo(repo, permission)
+
+                    for member in team_config.members():
+                        existing_team.grant_access(member)
+                    for admin in team_config.admins():
+                        existing_team.grant_access(admin, role='maintainer')
+
+    write('Nothing left to do, see you soon!')
 
 
 def main():
