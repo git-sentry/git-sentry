@@ -57,7 +57,7 @@ class GitOrg(AccessControlledGitObject):
     def create_team(self, name, repos=None, permission='pull'):
         if not repos:
             repos = []
-        return GitTeam(self._git_object.create_team(name, repo_names=repos, permission=permission, privacy='public'))
+        return GitTeam(self._git_object.create_team(name, repo_names=repos, permission=permission, privacy='closed'))
 
     def repositories(self):
         return [GitRepo(r) for r in self._git_object.repositories()]
