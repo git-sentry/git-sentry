@@ -1,0 +1,102 @@
+[[org]]
+pattern = '.*'
+
+[org.members]
+usernames = [
+]
+groups = [
+    'Original Avengers'
+]
+
+[org.admins]
+usernames = [
+]
+groups = [
+    'Leaders'
+]
+
+[[org.team]]
+name = 'read'
+
+[org.team.members]
+groups = [
+    'Original Avengers'
+]
+
+[org.team.admins]
+usernames = [
+    'Thor',
+    'Iron Man'
+]
+groups = [
+    'Leaders'
+]
+
+[[org.team.repo]]
+pattern = '.*'
+permission = 'pull'
+
+[[org]]
+pattern = 't.*'
+
+[org.admins]
+usernames = [
+    'Thor',
+    'Captain America'
+]
+
+[[org.team]]
+name = 'write'
+[org.team.admins]
+usernames = [
+    'Captain America'
+]
+[[org.team.repo]]
+pattern = 'repo(0|1)'
+permission = 'push'
+
+
+[[org]]
+pattern = 'lab'
+[org.members]
+usernames = [
+    'Iron Man',
+    'Bruce Banner',
+]
+groups = [
+    'Original Avengers'
+]
+[org.admins]
+usernames = [
+    'Iron Man',
+    'Bruce Banner',
+]
+
+[[org.team]]
+name = 'doctors'
+[org.team.members]
+usernames = [
+    'Iron Man',
+    'Bruce Banner',
+]
+
+[[org.team.repo]]
+pattern = '.*'
+permission = 'admin'
+
+
+[[org.team]]
+name = 'not-doctors'
+
+[org.team.members]
+usernames = [
+    'Thor',
+    'Captain America',
+]
+groups = [
+    'Shield Agents'
+]
+
+[[org.team.repo]]
+pattern = '.*'
+permission = 'pull'

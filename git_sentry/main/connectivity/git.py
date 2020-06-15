@@ -5,17 +5,23 @@ from git_sentry.handlers.git_org import GitOrg
 from git_sentry.handlers.git_repo import GitRepo
 from github3 import login, enterprise_login
 
+from git_sentry.handlers.git_user import GitUser
+
 git_client = None
 
 
 class GitClient:
-    def __init__(self):
-        self._git_client = _connect()
+    def __init__(self, client=None):
+        if client is None:
+            self._git_client = _connect()
+        else:
+            self._git_client = client
+
         self._orgs = None
         self._repos = None
 
     def me(self):
-        return self._git_client.me()
+        return GitUser(self._git_client.me())
 
     def search_orgs(self, query):
         if self._orgs is None:

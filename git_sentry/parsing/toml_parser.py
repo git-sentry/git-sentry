@@ -1,10 +1,10 @@
 import glob
 import os
-import pprint
 import typing
 from collections import OrderedDict
 
 import toml
+
 from git_sentry.logging.printer import write
 from git_sentry.parsing.group_config import GroupConfig
 from git_sentry.parsing.org_config import OrgConfig
