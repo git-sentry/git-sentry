@@ -37,7 +37,7 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
 
         if role == 'admin':
             final_members = existing_admins
-        if role == 'members':
+        if role == 'member':
             final_members = existing_members
 
         return [mock_user(m).raw_object() for m in final_members]
@@ -58,6 +58,7 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
         mocked_team = mock_team(team_name, mocked_org.login)
         if mocked_team not in teams:
             teams.append(mocked_team)
+        return mocked_team.raw_object()
 
     def get_teams():
         return [t.raw_object() for t in teams]
@@ -77,11 +78,13 @@ def mock_org(org_name, number_of_repos=0, owner=None, team_names=None):
     return GitOrg(mocked_org)
 
 
-def mock_repo(parent, repo_name):
+def mock_repo(parent, repo_name, team_permission=None):
     mocked_repo = mock.MagicMock(spec=ShortRepository)
     mocked_repo.name = repo_name
     mocked_repo.login = repo_name
     mocked_repo.full_name = f'{parent}/{repo_name}'
+    if team_permission is not None:
+        mocked_repo.as_dict.return_value = {'permissions': {team_permission: True}}
 
     return GitRepo(mocked_repo)
 
@@ -127,11 +130,10 @@ def mock_team(team_name, organization):
         return [mock_user(m).raw_object() for m in final_members]
 
     def add_to_repo(mock_repo, permission):
-        # TODO: This needs to match the API call
         repos[mock_repo] = permission
 
     def get_repos():
-        return [mock_repo(organization, repo).raw_object() for repo in repos.keys()]
+        return [mock_repo(organization, repo, permission).raw_object() for repo, permission in repos.items()]
 
     mocked_team.add_or_update_membership.side_effect = add_member
     mocked_team.add_repository.side_effect = add_to_repo

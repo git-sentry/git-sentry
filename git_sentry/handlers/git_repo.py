@@ -18,12 +18,12 @@ class GitRepo(AccessControlledGitObject):
         return self._git_object.as_dict()
 
     def permission_for_team(self, team):
-        permissions = self.as_dict()['permissions']
-        if permissions['admin']:
+        permissions = self.as_dict().get('permissions', {})
+        if permissions.get('admin', False):
             return 'admin'
-        elif permissions['push']:
+        elif permissions.get('push', False):
             return 'push'
-        elif permissions['pull']:
+        elif permissions.get('pull', False):
             return 'pull'
         else:
             return None
