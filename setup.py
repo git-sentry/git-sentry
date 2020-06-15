@@ -3,11 +3,11 @@ See:
 https://packaging.python.org/guides/distributing-packages-using-setuptools/
 https://github.com/pypa/sampleproject
 """
-
+import subprocess
 from os import path
 
 # Always prefer setuptools over distutils
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # io.open is needed for projects that support Python 2.7
 # It ensures open() defaults to text mode with universal newlines,
@@ -15,6 +15,7 @@ from setuptools import setup
 # Python 3 only projects can skip this import
 
 here = path.abspath(path.dirname(__file__))
+version = subprocess.run('git describe'.split(' '), capture_output=True, encoding='utf-8').stdout
 
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
@@ -46,12 +47,12 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.1',  # Required
+    version=version,  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='Zen Github Tools',  # Optional
+    description='GitHub User Access Sentry',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -127,7 +128,6 @@ setup(
 
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
-    package_dir={'git_sentry': 'git_sentry'},  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -138,7 +138,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    # packages=find_packages(where='zen'),  # Required
+    packages=find_packages(),  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -193,7 +193,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'sentry=git_sentry.main.git_sentry:main',
+            'sentry=git_sentry.main.sentry:run_cli',
         ],
     },
 
