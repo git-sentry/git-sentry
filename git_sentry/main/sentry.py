@@ -9,11 +9,12 @@ from git_sentry.parsing.toml_parser import parse_toml_configuration
 
 
 @click.group()
+@click.version_option(version=None)
 def cli():
     pass
 
 
-@cli.command()
+@cli.command(help='Apply Git config from path')
 @click.argument('toml_path', type=click.Path(exists=True, resolve_path=True))
 @click.option('-n', '--dry-run', is_flag=True, default=False)
 def apply(toml_path, dry_run):
@@ -28,9 +29,9 @@ def apply(toml_path, dry_run):
     write('Nothing left to do, see you soon!')
 
 
-def main():
+def run_cli():
     cli()
 
 
 if __name__ == '__main__':
-    main()
+    run_cli()

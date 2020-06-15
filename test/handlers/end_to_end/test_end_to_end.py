@@ -63,6 +63,7 @@ class TestEndToEnd:
 
         check_training_org(training_org)
         check_tools_org(tools_org)
+        check_lab_org(lab_org)
 
 
 def check_training_org(training_org):
@@ -115,7 +116,7 @@ def check_lab_org(lab_org):
     assert {team.name() for team in lab_org.teams()} == {'read', 'doctors', 'not-doctors'}
 
     check_members(lab_org.members(role='member'), {'Thor', 'Black Widow', 'Hawkeye'})
-    check_members(lab_org.members(role='admin'), {'Iron Man', 'Captain America', 'Bruce Banner'})
+    check_members(lab_org.members(role='admin'), {'Iron Man', 'Captain America', 'Bruce Banner', 'Professor Hulk'})
 
     lab_org_read = lab_org.team('read')
     check_members(lab_org_read.members(role='member'), {'Bruce Banner', 'Black Widow', 'Hawkeye'})
