@@ -2,10 +2,10 @@ import os
 
 import click
 
-from git_sentry.handlers.git_config import apply_configuration
-from git_sentry.logging.printer import write, focus_out
-from git_sentry.main.connectivity.git import GitClient
-from git_sentry.parsing.toml_parser import parse_toml_configuration
+from zen_core.handlers.git_config import apply_configuration
+from zen_core.logging.printer import write, focus_out
+from zen_core.handlers.git_client import GitClient
+from zen_core.parsing.toml_parser import parse_toml_configuration
 
 
 @click.group()
